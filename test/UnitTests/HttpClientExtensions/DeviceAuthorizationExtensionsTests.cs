@@ -5,6 +5,7 @@ using FluentAssertions;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.WebUtilities;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -60,7 +61,7 @@ namespace IdentityModel.UnitTests
             };
 
             request.Headers.Add("custom", "custom");
-            request.Properties.Add("custom", "custom");
+            request.Options.TryAdd("custom", "custom");
 
             var _ = await client.RequestDeviceAuthorizationAsync(request);
 
@@ -73,8 +74,8 @@ namespace IdentityModel.UnitTests
             headers.Count().Should().Be(3);
             headers.Should().Contain(h => h.Key == "custom" && h.Value.First() == "custom");
 
-            var properties = httpRequest.Properties;
-            properties.Count.Should().Be(1);
+            var properties = httpRequest.Options;
+            properties.Count().Should().Be(1);
 
             var prop = properties.First();
             prop.Key.Should().Be("custom");

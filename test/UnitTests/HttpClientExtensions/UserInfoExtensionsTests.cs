@@ -4,6 +4,7 @@
 using FluentAssertions;
 using IdentityModel.Client;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -49,7 +50,7 @@ namespace IdentityModel.UnitTests
             };
 
             request.Headers.Add("custom", "custom");
-            request.Properties.Add("custom", "custom");
+            request.Options.TryAdd("custom", "custom");
 
             var response = await client.GetUserInfoAsync(request);
 
@@ -64,8 +65,8 @@ namespace IdentityModel.UnitTests
             headers.Should().Contain(h => h.Key == "custom" && h.Value.First() == "custom");
             headers.Should().Contain(h => h.Key == "Authorization" && h.Value.First() == "Bearer token");
 
-            var properties = httpRequest.Properties;
-            properties.Count.Should().Be(1);
+            var properties = httpRequest.Options;
+            properties.Count().Should().Be(1);
 
             var prop = properties.First();
             prop.Key.Should().Be("custom");
