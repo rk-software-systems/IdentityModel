@@ -38,5 +38,4 @@ jobs:
     - if: contains(matrix.runs-on, 'macOS') || contains(matrix.runs-on, 'ubuntu')
       run: ./build.sh
     - run: |
-        ./build.cmd sign
         dotnet nuget push .\artifacts\*.nupkg -s https://nuget.pkg.github.com/rk-software-systems/index.json -k ${{ secrets.MYGET }}
