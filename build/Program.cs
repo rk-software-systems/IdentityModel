@@ -54,7 +54,7 @@ namespace build
 
             Target(Targets.Pack, DependsOn(Targets.Build, Targets.CleanPackOutput), () =>
             {
-                Run("dotnet", $"pack ./src/IdentityModel.csproj -c Release -o {Directory.CreateDirectory(packOutput).FullName} --no-build --nologo");
+                Run("dotnet", $"pack ./src/IdentityModel.csproj -c Release -o \"{Directory.CreateDirectory(packOutput).FullName}\" --no-build --nologo");
             });
 
             Target("default", DependsOn(Targets.Test, Targets.Pack));

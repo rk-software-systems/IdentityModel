@@ -20,7 +20,6 @@ jobs:
         runs-on: [ubuntu-latest]
     name: ${{ matrix.runs-on }}
     runs-on: ${{ matrix.runs-on }}
-    
 
     steps:
     - uses: actions/checkout@v2.4.0
@@ -35,7 +34,6 @@ jobs:
 
     - run: dotnet --info
     
-    - if: contains(matrix.runs-on, 'macOS') || contains(matrix.runs-on, 'ubuntu')
-      run: ./build.sh
+    - run: ./build.sh
     - run: |
-        dotnet nuget push .\artifacts\*.nupkg -s https://nuget.pkg.github.com/rk-software-systems/index.json -k ${{ secrets.NUGETKEY }}
+        dotnet nuget push ./artifacts/*.nupkg -s https://nuget.pkg.github.com/rk-software-systems/index.json -k ${{ secrets.NUGETKEY }}
