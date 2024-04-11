@@ -9,6 +9,12 @@
         <TargetFrameworks>net8.0</TargetFrameworks>
     </PropertyGroup>
 
+  <PropertyGroup>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+    <AnalysisLevel>latest</AnalysisLevel>
+  </PropertyGroup>
+
     <ItemGroup>
         <None Update="documents\*">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
