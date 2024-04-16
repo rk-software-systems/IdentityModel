@@ -1,13 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-    <PropertyGroup>
-        <IsPackable>false</IsPackable>
-        <AssemblyOriginatorKeyFile>../../key.snk</AssemblyOriginatorKeyFile>
-        <SignAssembly>true</SignAssembly>
-    </PropertyGroup>
-
-    <PropertyGroup>
-        <TargetFrameworks>net8.0</TargetFrameworks>
-    </PropertyGroup>
+  
+  <PropertyGroup>
+    <TargetFrameworks>net8.0</TargetFrameworks>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
 
   <PropertyGroup>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
@@ -15,24 +11,32 @@
     <AnalysisLevel>latest</AnalysisLevel>
   </PropertyGroup>
 
-    <ItemGroup>
-        <None Update="documents\*">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-    </ItemGroup>
+  <ItemGroup>
+    <None Update="documents\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\..\src\IdentityModel.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\IdentityModel.csproj" />
+  </ItemGroup>
 
-    <ItemGroup>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
-        <PackageReference Include="xunit.runner.visualstudio" Version="2.5.7">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="xunit" Version="2.7.0" />
-        <PackageReference Include="FluentAssertions" Version="6.12.0" />
-		<PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="8.0.4" />
-	</ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
+    <PackageReference Include="xunit" Version="2.7.1" />
+    <PackageReference Include="FluentAssertions" Version="6.12.0" />
+    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="8.0.4" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EditorConfigFiles Remove="C:\Projects\RK\identity\IdentityModel\test\UnitTests\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="C:\Projects\RK\identity\IdentityModel\test\UnitTests\.editorconfig" />
+  </ItemGroup>
 </Project>

@@ -1,31 +1,36 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Authors>Dominick Baier;Brock Allen; Kanstantsin Karakou</Authors>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <IsTrimmable>true</IsTrimmable>
+  </PropertyGroup>
+
+  <!--Package description-->
+  <PropertyGroup>
+    <PackageId>RKSoftware.IdentityModel</PackageId>
     <Description>OpenID Connect &amp; OAuth 2.0 client library.</Description>
-	<PackageId>IdentityModel.RKSoftware</PackageId>
+    <Authors>Dominick Baier;Brock Allen;Kanstantsin Karakou;Stsefchak Raman</Authors>
     <PackageTags>OAuth2;OAuth 2.0;OpenID Connect;Security;Identity;IdentityServer</PackageTags>
     <PackageIcon>icon.jpg</PackageIcon>
     <PackageProjectUrl>https://github.com/IdentityModel/IdentityModel</PackageProjectUrl>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <Nullable>enable</Nullable>
-    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
 
-    <!-- Enable Trimming Warnings to allow consumers to publish as trimmed -->
-    <IsTrimmable>true</IsTrimmable>
+  <!--Analyzers-->
+  <PropertyGroup>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+    <AnalysisLevel>latest</AnalysisLevel>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="../icon.jpg" Pack="true" Visible="false" PackagePath="" />
   </ItemGroup>
-
-  <!--Strong Naming-->
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>../key.snk</AssemblyOriginatorKeyFile>
-    <SignAssembly>true</SignAssembly>
-    <PublicSign>true</PublicSign>
-  </PropertyGroup>
-
+  
   <!--SourceLink-->
   <PropertyGroup>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -33,22 +38,14 @@
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
 
-  <PropertyGroup>
-    <TargetFrameworks>net8.0</TargetFrameworks>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <EnableNETAnalyzers>true</EnableNETAnalyzers>
-    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
-    <AnalysisLevel>latest</AnalysisLevel>
-  </PropertyGroup>
-  
+  <!--Packages-->
   <ItemGroup>
     <PackageReference Include="minver" Version="5.0.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
-	<PackageReference Include="System.Text.Json" Version="8.0.3" />
+    <PackageReference Include="System.Text.Json" Version="8.0.3" />
   </ItemGroup>
 
+  <!--MinVer-->
   <Target Name="SetAssemblyVersion" AfterTargets="MinVer">
     <PropertyGroup>
       <AssemblyVersion>$(MinVerMajor).$(MinVerMinor).$(MinVerPatch).0</AssemblyVersion>
