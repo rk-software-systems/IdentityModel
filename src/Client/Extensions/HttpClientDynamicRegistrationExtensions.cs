@@ -2,13 +2,8 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 using IdentityModel.Internal;
-using IdentityModel.Jwk;
-using System;
-using System.Net.Http;
 using System.Text;
 using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace IdentityModel.Client;
 
@@ -27,6 +22,10 @@ public static class HttpClientDynamicRegistrationExtensions
     public static async Task<DynamicClientRegistrationResponse> RegisterClientAsync(
         this HttpMessageInvoker client, DynamicClientRegistrationRequest request, CancellationToken cancellationToken = default)
     {
+        ArgumentNullException.ThrowIfNull(client, nameof(client));
+
+        ArgumentNullException.ThrowIfNull(request, nameof(request));
+
         var clone = request.Clone();
 
         clone.Method = HttpMethod.Post;
@@ -36,9 +35,9 @@ public static class HttpClientDynamicRegistrationExtensions
             "application/json");
         clone.Prepare();
 
-        if (request.Token.IsPresent())
+        if (!string.IsNullOrWhiteSpace(request.Token))
         {
-            clone.SetBearerToken(request.Token!);
+            clone.SetBearerToken(request.Token);
         }
 
         HttpResponseMessage response;

@@ -2,10 +2,6 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 using IdentityModel.Internal;
-using System;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace IdentityModel.Client;
 
@@ -23,7 +19,10 @@ public static class HttpClientDiscoveryExtensions
     /// <returns></returns>
     public static async Task<DiscoveryDocumentResponse> GetDiscoveryDocumentAsync(this HttpClient client, string? address = null, CancellationToken cancellationToken = default)
     {
-        return await client.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest { Address = address }, cancellationToken).ConfigureAwait();
+        return await client.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest 
+        { 
+            Address = address 
+        }, cancellationToken).ConfigureAwait();
     }
 
     /// <summary>
@@ -35,14 +34,18 @@ public static class HttpClientDiscoveryExtensions
     /// <returns></returns>
     public static async Task<DiscoveryDocumentResponse> GetDiscoveryDocumentAsync(this HttpMessageInvoker client, DiscoveryDocumentRequest request, CancellationToken cancellationToken = default)
     {
-        string address;
+        ArgumentNullException.ThrowIfNull(client, nameof(client));
+
+        ArgumentNullException.ThrowIfNull(request, nameof(request));
+
+        string? address;
         if (request.Address.IsPresent())
         {
-            address = request.Address!;
+            address = request.Address;
         }
         else if (client is HttpClient httpClient)
         {
-            address = httpClient.BaseAddress!.AbsoluteUri;
+            address = httpClient.BaseAddress?.AbsoluteUri;
         }
         else
         {

@@ -3,11 +3,7 @@
 
 using IdentityModel.Internal;
 using IdentityModel.Jwk;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 #pragma warning disable 1591
 
@@ -18,11 +14,11 @@ namespace IdentityModel.Client;
 /// </summary>
 public class DiscoveryDocumentResponse : ProtocolResponse
 {
-    public DiscoveryPolicy Policy { get; set; } = default!;
+    public DiscoveryPolicy? Policy { get; set; }
 
     protected override Task InitializeAsync(object? initializationData = null)
     {
-        if (!HttpResponse.IsSuccessStatusCode)
+        if (HttpResponse?.IsSuccessStatusCode != true)
         {
             ErrorMessage = initializationData as string;
             return Task.CompletedTask;
@@ -101,7 +97,7 @@ public class DiscoveryDocumentResponse : ProtocolResponse
         {
             IAuthorityValidationStrategy strategy = policy.AuthorityValidationStrategy ?? DiscoveryPolicy.DefaultAuthorityValidationStrategy;
 
-            AuthorityValidationResult issuerValidationResult = strategy.IsIssuerNameValid(Issuer!, policy.Authority);
+            AuthorityValidationResult issuerValidationResult = strategy.IsIssuerNameValid(Issuer, policy.Authority);
 
             if (!issuerValidationResult.Success)
             {
@@ -124,7 +120,7 @@ public class DiscoveryDocumentResponse : ProtocolResponse
     /// <param name="issuer">The issuer.</param>
     /// <param name="authority">The authority.</param>
     /// <returns></returns>
-    public bool ValidateIssuerName(string issuer, string authority)
+    public static bool ValidateIssuerName(string issuer, string authority)
     {
         return DiscoveryPolicy.DefaultAuthorityValidationStrategy.IsIssuerNameValid(issuer, authority).Success;
     }
@@ -136,7 +132,7 @@ public class DiscoveryDocumentResponse : ProtocolResponse
     /// <param name="authority">The authority.</param>
     /// <param name="nameComparison">The comparison mechanism that should be used when performing the match.</param>
     /// <returns></returns>
-    public bool ValidateIssuerName(string issuer, string authority, StringComparison nameComparison)
+    public static bool ValidateIssuerName(string issuer, string authority, StringComparison nameComparison)
     {
         return new StringComparisonAuthorityValidationStrategy(nameComparison).IsIssuerNameValid(issuer, authority).Success;
     }
@@ -148,8 +144,10 @@ public class DiscoveryDocumentResponse : ProtocolResponse
     /// <param name="authority">The authority.</param>
     /// <param name="validationStrategy">The strategy to use.</param>
     /// <returns></returns>
-    private bool ValidateIssuerName(string issuer, string authority, IAuthorityValidationStrategy validationStrategy)
+    public static bool ValidateIssuerName(string issuer, string authority, IAuthorityValidationStrategy validationStrategy)
     {
+        ArgumentNullException.ThrowIfNull(validationStrategy, nameof(validationStrategy));
+
         return validationStrategy.IsIssuerNameValid(issuer, authority).Success;
     }
     
@@ -161,6 +159,10 @@ public class DiscoveryDocumentResponse : ProtocolResponse
     /// <returns></returns>
     public string ValidateEndpoints(JsonElement json, DiscoveryPolicy policy)
     {
+        ArgumentNullException.ThrowIfNull(json, nameof(json));
+
+        ArgumentNullException.ThrowIfNull(policy, nameof(policy));
+
         // allowed hosts
         var allowedHosts = new HashSet<string>(policy.AdditionalEndpointBaseAddresses.Select(e => new Uri(e).Authority))
         {
@@ -187,12 +189,12 @@ public class DiscoveryDocumentResponse : ProtocolResponse
                     return $"Malformed endpoint: {endpoint}";
                 }
             
-                if (!DiscoveryEndpoint.IsValidScheme(uri!))
+                if (!DiscoveryEndpoint.IsValidScheme(uri))
                 {
                     return $"Malformed endpoint: {endpoint}";
                 }
             
-                if (!DiscoveryEndpoint.IsSecureScheme(uri!, policy))
+                if (!DiscoveryEndpoint.IsSecureScheme(uri, policy))
                 {
                     return $"Endpoint does not use HTTPS: {endpoint}";
                 }
@@ -208,7 +210,7 @@ public class DiscoveryDocumentResponse : ProtocolResponse
                     bool isAllowed = false;
                     foreach (var host in allowedHosts)
                     {
-                        if (string.Equals(host, uri!.Authority))
+                        if (string.Equals(host, uri.Authority, StringComparison.Ordinal))
                         {
                             isAllowed = true;
                         }

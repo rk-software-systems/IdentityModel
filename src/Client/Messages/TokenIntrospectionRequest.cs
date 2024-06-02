@@ -15,7 +15,7 @@ public class TokenIntrospectionRequest : ProtocolRequest
     /// <value>
     /// The token.
     /// </value>
-    public string Token { get; set; } = default!;
+    public required string Token { get; set; }
 
     /// <summary>
     /// Gets or sets the token type hint.

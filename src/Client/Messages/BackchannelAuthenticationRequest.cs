@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace IdentityModel.Client;
 
 /// <summary>
@@ -11,7 +9,7 @@ public class BackchannelAuthenticationRequest : ProtocolRequest
     /// <summary>
     /// REQUIRED. The scope of the access request as described by Section 3.3 of RFC6749.
     /// </summary>
-    public string Scope { get; set; } = default!;
+    public required string Scope { get; set; }
 
     /// <summary>
     /// REQUIRED if the Client is registered to use Ping or Push modes.

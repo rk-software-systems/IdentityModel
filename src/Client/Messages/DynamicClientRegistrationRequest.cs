@@ -23,5 +23,5 @@ public class DynamicClientRegistrationRequest : ProtocolRequest
     /// <value>
     /// The registration request.
     /// </value>
-    public DynamicClientRegistrationDocument Document { get; set; } = default!;
+    public required DynamicClientRegistrationDocument Document { get; set; }
 }

@@ -8,6 +8,6 @@ namespace IdentityModel.Client;
     GenerationMode = JsonSourceGenerationMode.Metadata,
     DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull)]
 [JsonSerializable(typeof(DynamicClientRegistrationDocument))]
-internal partial class ClientMessagesSourceGenerationContext : JsonSerializerContext
+internal sealed partial class ClientMessagesSourceGenerationContext : JsonSerializerContext
 {
 }

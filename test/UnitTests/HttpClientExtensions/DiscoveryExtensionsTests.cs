@@ -4,6 +4,7 @@
 using FluentAssertions;
 using IdentityModel.Client;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -51,7 +52,7 @@ namespace IdentityModel.UnitTests
             };
 
             request.Headers.Add("custom", "custom");
-            request.Properties.Add("custom", "custom");
+            request.Options.TryAdd("custom", "custom");
 
             var response = await client.GetDiscoveryDocumentAsync(request);
 
@@ -65,8 +66,8 @@ namespace IdentityModel.UnitTests
             headers.Count().Should().Be(2);
             headers.Should().Contain(h => h.Key == "custom" && h.Value.First() == "custom");
 
-            var properties = httpRequest.Properties;
-            properties.Count.Should().Be(1);
+            var properties = httpRequest.Options;
+            properties.Count().Should().Be(1);
 
             var prop = properties.First();
             prop.Key.Should().Be("custom");
@@ -224,10 +225,10 @@ namespace IdentityModel.UnitTests
         public async Task Mtls_alias_accessors_should_behave_as_expected()
         {
             var discoFileName = FileName.Create("discovery_mtls.json");
-            var document = File.ReadAllText(discoFileName);
+            var document = await File.ReadAllTextAsync(discoFileName);
 
             var jwksFileName = FileName.Create("discovery_jwks.json");
-            var jwks = File.ReadAllText(jwksFileName);
+            var jwks = await File.ReadAllTextAsync(jwksFileName);
 
             var handler = new NetworkHandler(request =>
             {

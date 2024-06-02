@@ -18,7 +18,7 @@ namespace IdentityModel.UnitTests
         {
             Action act = () => DiscoveryEndpoint.ParseUrl(input);
 
-            act.Should().Throw<InvalidOperationException>().Where(e => e.Message.Equals("Malformed URL"));
+            act.Should().Throw<InvalidOperationException>().Where(e => e.Message.Equals("Malformed URL", StringComparison.Ordinal));
         }
 
         [Theory]

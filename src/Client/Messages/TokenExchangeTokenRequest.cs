@@ -29,12 +29,12 @@ public class TokenExchangeTokenRequest : TokenRequest
     /// <summary>
     /// REQUIRED.  A security token that represents the identity of the party on behalf of whom the request is being made.
     /// </summary>
-    public string SubjectToken { get; set; } = default!;
+    public required string SubjectToken { get; set; }
 
     /// <summary>
     /// REQUIRED.  An identifier that indicates the type of the security token in the "subject_token" parameter.
     /// </summary>
-    public string SubjectTokenType { get; set; } = default!;
+    public required string SubjectTokenType { get; set; }
 
     /// <summary>
     /// OPTIONAL.  A security token that represents the identity of the acting party.

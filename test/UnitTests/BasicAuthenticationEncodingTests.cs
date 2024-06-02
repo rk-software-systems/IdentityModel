@@ -28,7 +28,7 @@ namespace IdentityModel.UnitTests
             decodedSecret.Should().Be(secret);
         }
 
-        private void DecodeOAuthHeader(string value, out string id, out string secret)
+        private static void DecodeOAuthHeader(string value, out string id, out string secret)
         {
             var unbased = Unbase64(value);
             var items = unbased.Split(':');
@@ -37,7 +37,7 @@ namespace IdentityModel.UnitTests
             secret = Uri.UnescapeDataString(items[1].Replace("+", "%20"));
         }
 
-        private string Unbase64(string value)
+        private static string Unbase64(string value)
         {
             var unbased = Convert.FromBase64String(value);
             return Encoding.UTF8.GetString(unbased);

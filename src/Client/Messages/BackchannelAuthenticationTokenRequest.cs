@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace IdentityModel.Client;
 
 /// <summary>
@@ -11,7 +9,7 @@ public class BackchannelAuthenticationTokenRequest : TokenRequest
     /// <summary>
     /// REQUIRED. It is the unique identifier to identify the authentication request (transaction) made by the Client.
     /// </summary>
-    public string AuthenticationRequestId { get; set; } = default!;
+    public required string AuthenticationRequestId { get; set; }
     
     /// <summary>
     /// List of requested resources

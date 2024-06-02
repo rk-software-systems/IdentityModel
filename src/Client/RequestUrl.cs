@@ -2,25 +2,19 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 using IdentityModel.Internal;
-using System.Linq;
 
 namespace IdentityModel.Client;
 
 /// <summary>
 /// Helper class for creating request URLs
 /// </summary>
-public class RequestUrl
+/// <remarks>
+/// Initializes a new instance of the <see cref="RequestUrl"/> class.
+/// </remarks>
+/// <param name="baseUrl">The authorize endpoint.</param>
+public class RequestUrl(string baseUrl)
 {
-    private readonly string _baseUrl;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="RequestUrl"/> class.
-    /// </summary>
-    /// <param name="baseUrl">The authorize endpoint.</param>
-    public RequestUrl(string baseUrl)
-    {
-        _baseUrl = baseUrl;
-    }
+    private readonly string _baseUrl = baseUrl;
 
     /// <summary>
     /// Creates URL based on key/value input pairs.

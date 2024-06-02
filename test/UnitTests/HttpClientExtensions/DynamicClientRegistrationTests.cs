@@ -4,6 +4,7 @@
 using FluentAssertions;
 using IdentityModel.Client;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -33,7 +34,7 @@ namespace IdentityModel.UnitTests
             };
 
             request.Headers.Add("custom", "custom");
-            request.Properties.Add("custom", "custom");
+            request.Options.TryAdd("custom", "custom");
 
             var response = await client.RegisterClientAsync(request);
 
@@ -47,8 +48,8 @@ namespace IdentityModel.UnitTests
             headers.Count().Should().Be(2);
             headers.Should().Contain(h => h.Key == "custom" && h.Value.First() == "custom");
 
-            var properties = httpRequest.Properties;
-            properties.Count.Should().Be(1);
+            var properties = httpRequest.Options;
+            properties.Count().Should().Be(1);
 
             var prop = properties.First();
             prop.Key.Should().Be("custom");
@@ -58,7 +59,7 @@ namespace IdentityModel.UnitTests
         [Fact]
         public async Task Valid_protocol_response_should_be_handled_correctly()
         {
-            var document = File.ReadAllText(FileName.Create("success_registration_response.json"));
+            var document = await File.ReadAllTextAsync(FileName.Create("success_registration_response.json"));
             var handler = new NetworkHandler(document, HttpStatusCode.Created);
 
             var client = new HttpClient(handler);

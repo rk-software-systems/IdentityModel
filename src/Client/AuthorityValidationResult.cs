@@ -1,13 +1,12 @@
-﻿using System;
+﻿#pragma warning disable 1591
 
-#pragma warning disable 1591
 namespace IdentityModel.Client;
 
 public struct AuthorityValidationResult
 {
     public static readonly AuthorityValidationResult SuccessResult = new(true, null);
 
-    public string ErrorMessage { get; }
+    public string? ErrorMessage { get; }
 
     public bool Success { get; }
 
@@ -18,7 +17,7 @@ public struct AuthorityValidationResult
             throw new ArgumentException("A message must be provided if success=false.", nameof(message));
         }
 
-        ErrorMessage = message!;
+        ErrorMessage = message;
         Success = success;
     }
 
@@ -27,7 +26,7 @@ public struct AuthorityValidationResult
         return new AuthorityValidationResult(false, message);
     }
 
-    public override string ToString()
+    public override string? ToString()
     {
         return Success ? "success" : ErrorMessage;
     }

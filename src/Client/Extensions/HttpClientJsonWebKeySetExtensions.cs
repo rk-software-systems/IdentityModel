@@ -2,11 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 using IdentityModel.Internal;
-using System;
-using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace IdentityModel.Client;
 
@@ -39,6 +35,10 @@ public static class HttpClientJsonWebKeySetExtensions
     /// <returns></returns>
     public static async Task<JsonWebKeySetResponse> GetJsonWebKeySetAsync(this HttpMessageInvoker client, JsonWebKeySetRequest request, CancellationToken cancellationToken = default)
     {
+        ArgumentNullException.ThrowIfNull(client, nameof(client));
+
+        ArgumentNullException.ThrowIfNull(request, nameof(request));
+
         var clone = request.Clone();
 
         clone.Method = HttpMethod.Get;
@@ -53,7 +53,7 @@ public static class HttpClientJsonWebKeySetExtensions
 
             if (!response.IsSuccessStatusCode)
             {
-                return await ProtocolResponse.FromHttpResponseAsync<JsonWebKeySetResponse>(response, $"Error connecting to {clone.RequestUri!.AbsoluteUri}: {response.ReasonPhrase}").ConfigureAwait();
+                return await ProtocolResponse.FromHttpResponseAsync<JsonWebKeySetResponse>(response, $"Error connecting to {clone.RequestUri?.AbsoluteUri}: {response.ReasonPhrase}").ConfigureAwait();
             }
         }
         catch (OperationCanceledException)
@@ -62,7 +62,7 @@ public static class HttpClientJsonWebKeySetExtensions
         }
         catch (Exception ex)
         {
-            return ProtocolResponse.FromException<JsonWebKeySetResponse>(ex, $"Error connecting to {clone.RequestUri!.AbsoluteUri}. {ex.Message}.");
+            return ProtocolResponse.FromException<JsonWebKeySetResponse>(ex, $"Error connecting to {clone.RequestUri?.AbsoluteUri}. {ex.Message}.");
         }
 
         return await ProtocolResponse.FromHttpResponseAsync<JsonWebKeySetResponse>(response).ConfigureAwait();

@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace IdentityModel.Client;
 
 /// <summary>
@@ -14,7 +12,7 @@ public class PasswordTokenRequest : TokenRequest
     /// <value>
     /// The name of the user.
     /// </value>
-    public string UserName { get; set; } = default!;
+    public required string UserName { get; set; }
 
     /// <summary>
     /// Gets or sets the password.

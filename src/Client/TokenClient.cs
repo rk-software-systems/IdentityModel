@@ -1,20 +1,21 @@
 ﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
-using System;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-
 namespace IdentityModel.Client;
 
 /// <summary>
 /// Client library for the OpenID Connect / OAuth 2 token endpoint
 /// </summary>
-public class TokenClient
+/// <remarks>
+/// Initializes a new instance of the <see cref="TokenClient"/> class.
+/// </remarks>
+/// <param name="client">The client func.</param>
+/// <param name="options">The options.</param>
+/// <exception cref="ArgumentNullException">client</exception>
+public class TokenClient(Func<HttpMessageInvoker> client, TokenClientOptions options)
 {
-    private readonly Func<HttpMessageInvoker> _client;
-    private readonly TokenClientOptions _options;
+    private readonly Func<HttpMessageInvoker> _client = client ?? throw new ArgumentNullException(nameof(client));
+    private readonly TokenClientOptions _options = options ?? throw new ArgumentNullException(nameof(options));
 
     /// <summary>
     /// Initializes a new instance of the <see cref="TokenClient"/> class.
@@ -22,21 +23,8 @@ public class TokenClient
     /// <param name="client">The client.</param>
     /// <param name="options">The options.</param>
     /// <exception cref="ArgumentNullException">client</exception>
-    public TokenClient(HttpMessageInvoker client, TokenClientOptions options)
-        : this(() => client, options)
+    public TokenClient(HttpMessageInvoker client, TokenClientOptions options) : this(() => client, options)
     { }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="TokenClient"/> class.
-    /// </summary>
-    /// <param name="client">The client func.</param>
-    /// <param name="options">The options.</param>
-    /// <exception cref="ArgumentNullException">client</exception>
-    public TokenClient(Func<HttpMessageInvoker> client, TokenClientOptions options)
-    {
-        _client = client ?? throw new ArgumentNullException(nameof(client));
-        _options = options ?? throw new ArgumentNullException(nameof(options));
-    }
 
     /// <summary>
     /// Sets request parameters from the options.
@@ -47,8 +35,8 @@ public class TokenClient
     {
         request.Address = _options.Address;
         request.ClientId = _options.ClientId;
-        request.ClientSecret = _options.ClientSecret!;
-        request.ClientAssertion = _options.ClientAssertion!;
+        request.ClientSecret = _options.ClientSecret;
+        request.ClientAssertion = _options.ClientAssertion;
         request.ClientCredentialStyle = _options.ClientCredentialStyle;
         request.AuthorizationHeaderStyle = _options.AuthorizationHeaderStyle;
         request.Parameters = new Parameters(_options.Parameters);

@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace IdentityModel.Client;
 
 /// <summary>
@@ -14,7 +12,7 @@ public class AuthorizationCodeTokenRequest : TokenRequest
     /// <value>
     /// The code.
     /// </value>
-    public string Code { get; set; } = default!;
+    public required string Code { get; set; }
 
     /// <summary>
     /// Gets or sets the redirect URI.
@@ -22,7 +20,7 @@ public class AuthorizationCodeTokenRequest : TokenRequest
     /// <value>
     /// The redirect URI.
     /// </value>
-    public string RedirectUri { get; set; } = default!;
+    public required string RedirectUri { get; set; }
         
     /// <summary>
     /// List of requested resources

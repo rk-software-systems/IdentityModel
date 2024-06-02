@@ -20,7 +20,7 @@ namespace IdentityModel.UnitTests
         [Fact]
         public async Task Valid_protocol_response_should_be_handled_correctly()
         {
-            var document = File.ReadAllText(FileName.Create("success_token_response.json"));
+            var document = await File.ReadAllTextAsync(FileName.Create("success_token_response.json"));
             var handler = new NetworkHandler(document, HttpStatusCode.OK);
 
             var client = new HttpClient(handler);

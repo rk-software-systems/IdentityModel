@@ -2,7 +2,6 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 using IdentityModel.Internal;
-using System.Collections.Generic;
 using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 
@@ -25,7 +24,7 @@ public static class Identity
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, "")
+                new(ClaimTypes.Name, "")
             };
 
             return new ClaimsIdentity(claims);
@@ -52,6 +51,8 @@ public static class Identity
     /// <returns></returns>
     public static ClaimsIdentity CreateFromCertificate(X509Certificate2 certificate, string authenticationType = "X.509", bool includeAllClaims = false)
     {
+        ArgumentNullException.ThrowIfNull(certificate, nameof(certificate));
+
         var claims = new List<Claim>();
         var issuer = certificate.Issuer;
 

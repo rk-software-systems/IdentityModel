@@ -1,8 +1,6 @@
 ﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
-using System;
-
 namespace IdentityModel;
 
 /// <summary>
@@ -34,6 +32,8 @@ public static class Base64Url
     /// <exception cref="System.Exception">Illegal base64url string!</exception>
     public static byte[] Decode(string arg)
     {
+        ArgumentNullException.ThrowIfNull(arg, nameof(arg));
+
         var s = arg;
         s = s.Replace('-', '+'); // 62nd char of encoding
         s = s.Replace('_', '/'); // 63rd char of encoding

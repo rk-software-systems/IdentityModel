@@ -6,7 +6,7 @@ namespace IdentityModel.Client;
 /// <summary>
 /// Models an OAuth device authorization response
 /// </summary>
-/// <seealso cref="IdentityModel.Client.ProtocolResponse" />
+/// <seealso cref="ProtocolResponse" />
 public class DeviceAuthorizationResponse : ProtocolResponse
 {
     /// <summary>

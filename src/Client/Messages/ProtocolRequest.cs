@@ -2,10 +2,6 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 using IdentityModel.Internal;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
 using System.Net.Http.Headers;
 
 namespace IdentityModel.Client;
@@ -38,7 +34,7 @@ public class ProtocolRequest : HttpRequestMessage
     /// <value>
     /// The client identifier.
     /// </value>
-    public string ClientId { get; set; } = default!;
+    public string? ClientId { get; set; }
 
     /// <summary>
     /// Gets or sets the client secret.
@@ -54,7 +50,7 @@ public class ProtocolRequest : HttpRequestMessage
     /// <value>
     /// The assertion.
     /// </value>
-    public ClientAssertion ClientAssertion { get; set; } = new();
+    public ClientAssertion? ClientAssertion { get; set; }
 
     /// <summary>
     /// Gets or sets the client credential style (post body vs authorization header).
@@ -96,8 +92,7 @@ public class ProtocolRequest : HttpRequestMessage
     /// <summary>
     /// Clones this instance.
     /// </summary>
-    public T Clone<T>()
-        where T: ProtocolRequest, new()
+    public T Clone<T>() where T: ProtocolRequest, new()
     {
         var clone = new T
         {
@@ -126,7 +121,6 @@ public class ProtocolRequest : HttpRequestMessage
             clone.Headers.TryAddWithoutValidation(header.Key, header.Value);
         }
 
-#if NET5_0_OR_GREATER
         if (Options.Any())
         {
             foreach (var property in Options)
@@ -134,15 +128,6 @@ public class ProtocolRequest : HttpRequestMessage
                 clone.Options.TryAdd(property.Key, property.Value);
             }
         }          
-#else
-            if (Properties != null && Properties.Any())
-            {
-                foreach (var property in Properties)
-                {
-                    clone.Properties.Add(property);
-                }
-            }
-#endif
         return clone;
     }
 
@@ -151,7 +136,7 @@ public class ProtocolRequest : HttpRequestMessage
     /// </summary>
     public void Prepare()
     {
-        if (ClientId.IsPresent())
+        if (!string.IsNullOrWhiteSpace(ClientId))
         {
             if (ClientCredentialStyle == ClientCredentialStyle.AuthorizationHeader)
             {
@@ -191,9 +176,9 @@ public class ProtocolRequest : HttpRequestMessage
             Parameters.AddOptional(OidcConstants.TokenRequest.ClientAssertion, ClientAssertion.Value);
         }
 
-        if (Address.IsPresent())
+        if (!string.IsNullOrWhiteSpace(Address))
         {
-            RequestUri = new Uri(Address!, UriKind.RelativeOrAbsolute);
+            RequestUri = new Uri(Address, UriKind.RelativeOrAbsolute);
         }
 
         if (DPoPProofToken.IsPresent())

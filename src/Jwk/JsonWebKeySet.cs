@@ -25,8 +25,6 @@
 //
 //------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -51,11 +49,9 @@ public class JsonWebKeySet
     /// <exception cref="ArgumentNullException">if 'json' is null or whitespace.</exception>
     public JsonWebKeySet(string json)
     {
-        if (string.IsNullOrWhiteSpace(json)) throw new ArgumentNullException(nameof(json));
+        ArgumentException.ThrowIfNullOrWhiteSpace(json, nameof(json));
 
-        var jwebKeys = JsonSerializer.Deserialize<JsonWebKeySet>(json, JwkSourceGenerationContext.Default.JsonWebKeySet);
-        if (jwebKeys == null) throw new InvalidOperationException("invalid JSON web keys");
-        
+        var jwebKeys = JsonSerializer.Deserialize<JsonWebKeySet>(json, JwkSourceGenerationContext.Default.JsonWebKeySet) ?? throw new InvalidOperationException("invalid JSON web keys");
         Keys = jwebKeys.Keys;
         RawData = json;
     }

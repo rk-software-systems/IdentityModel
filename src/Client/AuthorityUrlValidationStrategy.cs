@@ -1,6 +1,4 @@
 ﻿using IdentityModel.Internal;
-using System;
-using System.Collections.Generic;
 
 namespace IdentityModel.Client;
 
@@ -16,7 +14,7 @@ public sealed class AuthorityUrlValidationStrategy : IAuthorityValidationStrateg
     {
         if (!Uri.TryCreate(expectedAuthority.RemoveTrailingSlash(), UriKind.Absolute, out var expectedAuthorityUrl))
         {
-            throw new ArgumentOutOfRangeException("Authority must be a valid URL.", nameof(expectedAuthority));
+            throw new ArgumentOutOfRangeException(nameof(expectedAuthority), "Authority must be a valid URL.");
         }
 
         if (string.IsNullOrWhiteSpace(issuerName))
@@ -38,7 +36,7 @@ public sealed class AuthorityUrlValidationStrategy : IAuthorityValidationStrateg
     }
 
     /// <inheritdoc/>
-    public AuthorityValidationResult IsEndpointValid(string endpoint, IEnumerable<string> allowedAuthorities)
+    public AuthorityValidationResult IsEndpointValid(string endpoint, IEnumerable<string> expectedAuthorities)
     {
         if (string.IsNullOrEmpty(endpoint))
         {
@@ -50,11 +48,13 @@ public sealed class AuthorityUrlValidationStrategy : IAuthorityValidationStrateg
             return AuthorityValidationResult.CreateError("Endpoint is not a valid URL");
         }
 
-        foreach (string authority in allowedAuthorities)
+        ArgumentNullException.ThrowIfNull(expectedAuthorities, nameof(expectedAuthorities));
+
+        foreach (string authority in expectedAuthorities)
         {
             if (!Uri.TryCreate(authority.RemoveTrailingSlash(), UriKind.Absolute, out var authorityUrl))
             {
-                throw new ArgumentOutOfRangeException("Authority must be a URL.", nameof(allowedAuthorities));
+                throw new ArgumentOutOfRangeException(nameof(expectedAuthorities), "Authority must be a URL.");
             }
 
             string expectedString = authorityUrl.ToString();

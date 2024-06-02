@@ -2,12 +2,8 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 using IdentityModel.Internal;
-using System;
-using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace IdentityModel.Client;
 
@@ -25,6 +21,8 @@ public class ProtocolResponse
     /// <returns></returns>
     public static async Task<T> FromHttpResponseAsync<T>(HttpResponseMessage httpResponse, object? initializationData = null) where T: ProtocolResponse, new()
     {
+        ArgumentNullException.ThrowIfNull(httpResponse, nameof(httpResponse));
+
         var response = new T
         {
             HttpResponse = httpResponse
@@ -45,11 +43,11 @@ public class ProtocolResponse
         {
             response.ErrorType = ResponseErrorType.Http;
 
-            if (content.IsPresent())
+            if (!string.IsNullOrWhiteSpace(content))
             {
                 try
                 {
-                    response.Json = JsonDocument.Parse(content!).RootElement;
+                    response.Json = JsonDocument.Parse(content).RootElement;
                 }
                 catch { }
             }
@@ -66,9 +64,9 @@ public class ProtocolResponse
         // either 200 or 400 - both cases need a JSON response (if present), otherwise error
         try
         {
-            if (content.IsPresent())
+            if (!string.IsNullOrWhiteSpace(content))
             {
-                response.Json = JsonDocument.Parse(content!).RootElement;
+                response.Json = JsonDocument.Parse(content).RootElement;
             }
         }
         catch (Exception ex)
@@ -124,7 +122,7 @@ public class ProtocolResponse
     /// <value>
     /// The HTTP response.
     /// </value>
-    public HttpResponseMessage HttpResponse { get; protected set; } = default!;
+    public HttpResponseMessage? HttpResponse { get; protected set; }
         
     /// <summary>
     /// Gets the raw protocol response (if present).
@@ -180,7 +178,7 @@ public class ProtocolResponse
     /// <value>
     /// The HTTP status code.
     /// </value>
-    public HttpStatusCode HttpStatusCode => this.HttpResponse?.StatusCode ?? default(HttpStatusCode);
+    public HttpStatusCode HttpStatusCode => this.HttpResponse?.StatusCode ?? default;
 
     /// <summary>
     /// Gets the HTTP error reason - or <see langword="null"/> when <see cref="HttpResponse" /> is <see langword="null"/>.
@@ -210,7 +208,7 @@ public class ProtocolResponse
             }
             if (ErrorType == ResponseErrorType.Exception)
             {
-                return Exception!.Message;
+                return Exception?.Message;
             }
 
             return TryGet(OidcConstants.TokenResponse.Error);

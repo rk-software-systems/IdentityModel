@@ -6,7 +6,7 @@ namespace IdentityModel.Client;
 /// <summary>
 /// Models a response from an OpenID Connect/OAuth 2 token endpoint
 /// </summary>
-/// <seealso cref="IdentityModel.Client.ProtocolResponse" />
+/// <seealso cref="ProtocolResponse" />
 public class TokenResponse : ProtocolResponse
 {
     /// <summary>

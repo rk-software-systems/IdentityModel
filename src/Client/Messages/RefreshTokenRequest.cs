@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace IdentityModel.Client;
 
 /// <summary>
@@ -14,7 +12,7 @@ public class RefreshTokenRequest : TokenRequest
     /// <value>
     /// The refresh token.
     /// </value>
-    public string RefreshToken { get; set; } = default!;
+    public required string RefreshToken { get; set; }
 
     /// <summary>
     /// Space separated list of the requested scopes.  The Scope attribute cannot be used to extend the scopes granted by the resource owner

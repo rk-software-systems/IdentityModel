@@ -9,6 +9,6 @@ namespace IdentityModel.Jwk;
     DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull)]
 [JsonSerializable(typeof(JsonWebKey))]
 [JsonSerializable(typeof(JsonWebKeySet))]
-internal partial class JwkSourceGenerationContext : JsonSerializerContext
+internal sealed partial class JwkSourceGenerationContext : JsonSerializerContext
 {
 }

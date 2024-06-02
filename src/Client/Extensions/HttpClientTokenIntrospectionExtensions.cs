@@ -2,10 +2,6 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 using IdentityModel.Internal;
-using System;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace IdentityModel.Client;
 
@@ -23,6 +19,10 @@ public static class HttpClientTokenIntrospectionExtensions
     /// <returns></returns>
     public static async Task<TokenIntrospectionResponse> IntrospectTokenAsync(this HttpMessageInvoker client, TokenIntrospectionRequest request, CancellationToken cancellationToken = default)
     {
+        ArgumentNullException.ThrowIfNull(client, nameof(client));
+
+        ArgumentNullException.ThrowIfNull(request, nameof(request));
+
         var clone = request.Clone();
 
         clone.Method = HttpMethod.Post;

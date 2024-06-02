@@ -1,6 +1,4 @@
 ﻿using IdentityModel.Internal;
-using System;
-using System.Collections.Generic;
 
 namespace IdentityModel.Client;
 
@@ -41,14 +39,16 @@ public sealed class StringComparisonAuthorityValidationStrategy : IAuthorityVali
     /// String "starts with" comparison between endpoint and allowed authorities.
     /// </summary>
     /// <param name="endpoint"></param>
-    /// <param name="allowedAuthorities"></param>
+    /// <param name="expectedAuthorities"></param>
     /// <returns></returns>
-    public AuthorityValidationResult IsEndpointValid(string endpoint, IEnumerable<string> allowedAuthorities)
+    public AuthorityValidationResult IsEndpointValid(string endpoint, IEnumerable<string> expectedAuthorities)
     {
+        ArgumentNullException.ThrowIfNull(expectedAuthorities, nameof(expectedAuthorities));
+
         if (string.IsNullOrEmpty(endpoint))
             return AuthorityValidationResult.CreateError("endpoint is empty");
 
-        foreach (string authority in allowedAuthorities)
+        foreach (string authority in expectedAuthorities)
         {
             if (endpoint.StartsWith(authority, _stringComparison))
                 return AuthorityValidationResult.SuccessResult;

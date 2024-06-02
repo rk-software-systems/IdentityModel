@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
+using System.Globalization;
 using System.Net.Http.Headers;
 using System.Text;
 
@@ -9,17 +10,14 @@ namespace System.Net.Http;
 /// <summary>
 /// HTTP Basic Authentication authorization header
 /// </summary>
-/// <seealso cref="System.Net.Http.Headers.AuthenticationHeaderValue" />
-public class BasicAuthenticationHeaderValue : AuthenticationHeaderValue
+/// <seealso cref="AuthenticationHeaderValue" />
+/// <remarks>
+/// Initializes a new instance of the <see cref="BasicAuthenticationHeaderValue"/> class.
+/// </remarks>
+/// <param name="userName">Name of the user.</param>
+/// <param name="password">The password.</param>
+public class BasicAuthenticationHeaderValue(string userName, string password) : AuthenticationHeaderValue("Basic", EncodeCredential(userName, password))
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="BasicAuthenticationHeaderValue"/> class.
-    /// </summary>
-    /// <param name="userName">Name of the user.</param>
-    /// <param name="password">The password.</param>
-    public BasicAuthenticationHeaderValue(string userName, string password)
-        : base("Basic", EncodeCredential(userName, password))
-    { }
 
     /// <summary>
     /// Encodes the credential.
@@ -34,7 +32,7 @@ public class BasicAuthenticationHeaderValue : AuthenticationHeaderValue
         if (password == null) password = "";
 
         Encoding encoding = Encoding.UTF8;
-        string credential = String.Format("{0}:{1}", userName, password);
+        string credential = String.Format(CultureInfo.InvariantCulture,"{0}:{1}", userName, password);
 
         return Convert.ToBase64String(encoding.GetBytes(credential));
     }

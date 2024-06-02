@@ -2,8 +2,6 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 using IdentityModel.Internal;
-using System;
-using System.Collections.Generic;
 using System.Net;
 
 namespace IdentityModel.Client;
@@ -13,6 +11,8 @@ namespace IdentityModel.Client;
 /// </summary>
 public class AuthorizeResponse
 {
+    private static readonly char[] _separator = ['&'];
+
     /// <summary>
     /// Initializes a new instance of the <see cref="AuthorizeResponse"/> class.
     /// </summary>
@@ -37,7 +37,7 @@ public class AuthorizeResponse
     /// <value>
     /// The values.
     /// </value>
-    public Dictionary<string, string> Values { get; } = new Dictionary<string, string>();
+    public Dictionary<string, string> Values { get; set; } = [];
 
     /// <summary>
     /// Gets the authorization code.
@@ -144,33 +144,35 @@ public class AuthorizeResponse
         }
     }
 
+   
+
     private void ParseRaw()
     {
         string[] fragments;
 
         // query string encoded
-        if (Raw.Contains("?"))
+        if (Raw.Contains('?', StringComparison.Ordinal))
         {
             fragments = Raw.Split('?');
 
-            var additionalHashFragment = fragments[1].IndexOf('#');
+            var additionalHashFragment = fragments[1].IndexOf('#', StringComparison.Ordinal);
             if (additionalHashFragment >= 0)
             {
                 fragments[1] = fragments[1].Substring(0, additionalHashFragment);
             }
         }
         // fragment encoded
-        else if (Raw.Contains("#"))
+        else if (Raw.Contains('#', StringComparison.Ordinal))
         {
             fragments = Raw.Split('#');
         }
         // form encoded
         else
         {
-            fragments = new[] { "", Raw };
+            fragments = ["", Raw];
         }
 
-        var qparams = fragments[1].Split(new[] { '&' }, StringSplitOptions.RemoveEmptyEntries);
+        var qparams = fragments[1].Split(_separator, StringSplitOptions.RemoveEmptyEntries);
 
         foreach (var param in qparams)
         {

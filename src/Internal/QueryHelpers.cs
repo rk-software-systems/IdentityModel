@@ -1,8 +1,6 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Text.Encodings.Web;
 
@@ -19,23 +17,16 @@ internal static class QueryHelpers
     /// <returns>The combined result.</returns>
     public static string AddQueryString(string uri, string name, string value)
     {
-        if (uri == null)
-        {
-            throw new ArgumentNullException(nameof(uri));
-        }
+        ArgumentNullException.ThrowIfNull(uri, nameof(uri));
 
-        if (name == null)
-        {
-            throw new ArgumentNullException(nameof(name));
-        }
+        ArgumentNullException.ThrowIfNull(name, nameof(name));
 
-        if (value == null)
-        {
-            throw new ArgumentNullException(nameof(value));
-        }
+        ArgumentNullException.ThrowIfNull(value, nameof(value));
 
-        return AddQueryString(
-            uri, new[] { new KeyValuePair<string, string>(name, value) });
+        return AddQueryString(uri,
+            [
+                new KeyValuePair<string, string>(name, value)
+            ]);
     }
 
     /// <summary>
@@ -46,15 +37,9 @@ internal static class QueryHelpers
     /// <returns>The combined result.</returns>
     public static string AddQueryString(string uri, IDictionary<string, string> queryString)
     {
-        if (uri == null)
-        {
-            throw new ArgumentNullException(nameof(uri));
-        }
+        ArgumentNullException.ThrowIfNull(uri, nameof(uri));
 
-        if (queryString == null)
-        {
-            throw new ArgumentNullException(nameof(queryString));
-        }
+        ArgumentNullException.ThrowIfNull(queryString, nameof(queryString));
 
         return AddQueryString(uri, (IEnumerable<KeyValuePair<string, string>>)queryString);
     }
@@ -63,17 +48,11 @@ internal static class QueryHelpers
         string uri,
         IEnumerable<KeyValuePair<string, string>> queryString)
     {
-        if (uri == null)
-        {
-            throw new ArgumentNullException(nameof(uri));
-        }
+        ArgumentNullException.ThrowIfNull(uri, nameof(uri));
 
-        if (queryString == null)
-        {
-            throw new ArgumentNullException(nameof(queryString));
-        }
+        ArgumentNullException.ThrowIfNull(queryString, nameof(queryString));
 
-        var anchorIndex = uri.IndexOf('#');
+        var anchorIndex = uri.IndexOf('#', StringComparison.Ordinal);
         var uriToBeAppended = uri;
         var anchorText = "";
         // If there is an anchor, then the query string must be inserted before its first occurance.
@@ -83,8 +62,7 @@ internal static class QueryHelpers
             uriToBeAppended = uri.Substring(0, anchorIndex);
         }
 
-        var queryIndex = uriToBeAppended.IndexOf('?');
-        var hasQuery = queryIndex != -1;
+        var hasQuery = uriToBeAppended.Contains('?', StringComparison.Ordinal);
 
         var sb = new StringBuilder();
         sb.Append(uriToBeAppended);

@@ -5,6 +5,7 @@ using FluentAssertions;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.WebUtilities;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -31,7 +32,7 @@ namespace IdentityModel.UnitTests
             };
 
             request.Headers.Add("custom", "custom");
-            request.Properties.Add("custom", "custom");
+            request.Options.TryAdd("custom", "custom");
 
             var response = await client.IntrospectTokenAsync(request);
 
@@ -45,8 +46,8 @@ namespace IdentityModel.UnitTests
             headers.Count().Should().Be(2);
             headers.Should().Contain(h => h.Key == "custom" && h.Value.First() == "custom");
 
-            var properties = httpRequest.Properties;
-            properties.Count.Should().Be(1);
+            var properties = httpRequest.Options;
+            properties.Count().Should().Be(1);
 
             var prop = properties.First();
             prop.Key.Should().Be("custom");
@@ -56,7 +57,7 @@ namespace IdentityModel.UnitTests
         [Fact]
         public async Task Success_protocol_response_should_be_handled_correctly()
         {
-            var document = File.ReadAllText(FileName.Create("success_introspection_response.json"));
+            var document = await File.ReadAllTextAsync(FileName.Create("success_introspection_response.json"));
             var handler = new NetworkHandler(document, HttpStatusCode.OK);
 
             var client = new HttpClient(handler)
@@ -76,7 +77,7 @@ namespace IdentityModel.UnitTests
             response.Claims.Should().NotBeEmpty();
 
             var audiences = response.Claims.Where(c => c.Type == "aud").ToList();
-            audiences.Count().Should().Be(2);
+            audiences.Count.Should().Be(2);
             audiences.First().Value.Should().Be("https://idsvr4/resources");
             audiences.Skip(1).First().Value.Should().Be("api1");
 
@@ -91,7 +92,7 @@ namespace IdentityModel.UnitTests
             response.Claims.First(c => c.Type == "active").Value.Should().Be("true");
 
             var scopes = response.Claims.Where(c => c.Type == "scope").ToList();
-            scopes.Count().Should().Be(2);
+            scopes.Count.Should().Be(2);
             scopes.First().Value.Should().Be("api1");
             scopes.First().Issuer.Should().Be("https://idsvr4");
             scopes.Skip(1).First().Value.Should().Be("api2");
@@ -101,7 +102,7 @@ namespace IdentityModel.UnitTests
         [Fact]
         public async Task Success_protocol_response_without_issuer_should_be_handled_correctly()
         {
-            var document = File.ReadAllText(FileName.Create("success_introspection_response_no_issuer.json"));
+            var document = await File.ReadAllTextAsync(FileName.Create("success_introspection_response_no_issuer.json"));
             var handler = new NetworkHandler(document, HttpStatusCode.OK);
 
             var client = new HttpClient(handler)
@@ -121,7 +122,7 @@ namespace IdentityModel.UnitTests
             response.Claims.Should().NotBeEmpty();
 
             var audiences = response.Claims.Where(c => c.Type == "aud").ToList();
-            audiences.Count().Should().Be(2);
+            audiences.Count.Should().Be(2);
             audiences.First().Value.Should().Be("https://idsvr4/resources");
             audiences.Skip(1).First().Value.Should().Be("api1");
 
@@ -135,7 +136,7 @@ namespace IdentityModel.UnitTests
             response.Claims.First(c => c.Type == "active").Value.Should().Be("true");
 
             var scopes = response.Claims.Where(c => c.Type == "scope").ToList();
-            scopes.Count().Should().Be(2);
+            scopes.Count.Should().Be(2);
             scopes.First().Value.Should().Be("api1");
             scopes.Skip(1).First().Value.Should().Be("api2");
         }
@@ -143,7 +144,7 @@ namespace IdentityModel.UnitTests
         [Fact]
         public async Task Repeating_a_request_should_succeed()
         {
-            var document = File.ReadAllText(FileName.Create("success_introspection_response.json"));
+            var document = await File.ReadAllTextAsync(FileName.Create("success_introspection_response.json"));
             var handler = new NetworkHandler(document, HttpStatusCode.OK);
 
             var client = new HttpClient(handler)
@@ -165,7 +166,7 @@ namespace IdentityModel.UnitTests
             response.Claims.Should().NotBeEmpty();
 
             var audiences = response.Claims.Where(c => c.Type == "aud").ToList();
-            audiences.Count().Should().Be(2);
+            audiences.Count.Should().Be(2);
             audiences.First().Value.Should().Be("https://idsvr4/resources");
             audiences.Skip(1).First().Value.Should().Be("api1");
 
@@ -180,7 +181,7 @@ namespace IdentityModel.UnitTests
             response.Claims.First(c => c.Type == "active").Value.Should().Be("true");
 
             var scopes = response.Claims.Where(c => c.Type == "scope").ToList();
-            scopes.Count().Should().Be(2);
+            scopes.Count.Should().Be(2);
             scopes.First().Value.Should().Be("api1");
             scopes.First().Issuer.Should().Be("https://idsvr4");
             scopes.Skip(1).First().Value.Should().Be("api2");
@@ -196,7 +197,7 @@ namespace IdentityModel.UnitTests
             response.Claims.Should().NotBeEmpty();
 
             audiences = response.Claims.Where(c => c.Type == "aud").ToList();
-            audiences.Count().Should().Be(2);
+            audiences.Count.Should().Be(2);
             audiences.First().Value.Should().Be("https://idsvr4/resources");
             audiences.Skip(1).First().Value.Should().Be("api1");
 
@@ -211,7 +212,7 @@ namespace IdentityModel.UnitTests
             response.Claims.First(c => c.Type == "active").Value.Should().Be("true");
 
             scopes = response.Claims.Where(c => c.Type == "scope").ToList();
-            scopes.Count().Should().Be(2);
+            scopes.Count.Should().Be(2);
             scopes.First().Value.Should().Be("api1");
             scopes.First().Issuer.Should().Be("https://idsvr4");
             scopes.Skip(1).First().Value.Should().Be("api2");
@@ -219,9 +220,9 @@ namespace IdentityModel.UnitTests
         }
 
         [Fact]
-        public void Request_without_token_should_fail()
+        public async Task Request_without_token_should_fail()
         {
-            var document = File.ReadAllText(FileName.Create("success_introspection_response.json"));
+            var document = await File.ReadAllTextAsync(FileName.Create("success_introspection_response.json"));
             var handler = new NetworkHandler(document, HttpStatusCode.OK);
 
             var client = new HttpClient(handler)
@@ -229,9 +230,9 @@ namespace IdentityModel.UnitTests
                 BaseAddress = new Uri(Endpoint)
             };
 
-            Func<Task> act = async () => await client.IntrospectTokenAsync(new TokenIntrospectionRequest());
+            Func<Task> act = async () => await client.IntrospectTokenAsync(new TokenIntrospectionRequest() { Token = string.Empty});
 
-            act.Should().Throw<ArgumentException>().And.ParamName.Should().Be("token");
+            (await act.Should().ThrowAsync<ArgumentException>()).And.ParamName.Should().Be("token");
         }
 
         [Fact]
@@ -292,7 +293,7 @@ namespace IdentityModel.UnitTests
         [Fact]
         public async Task Legacy_protocol_response_should_be_handled_correctly()
         {
-            var document = File.ReadAllText(FileName.Create("legacy_success_introspection_response.json"));
+            var document = await File.ReadAllTextAsync(FileName.Create("legacy_success_introspection_response.json"));
             var handler = new NetworkHandler(document, HttpStatusCode.OK);
 
             var client = new HttpClient(handler);
@@ -309,7 +310,7 @@ namespace IdentityModel.UnitTests
             response.Claims.Should().NotBeEmpty();
 
             var audiences = response.Claims.Where(c => c.Type == "aud").ToList();
-            audiences.Count().Should().Be(2);
+            audiences.Count.Should().Be(2);
             audiences.First().Value.Should().Be("https://idsvr4/resources");
             audiences.Skip(1).First().Value.Should().Be("api1");
 
@@ -324,7 +325,7 @@ namespace IdentityModel.UnitTests
             response.Claims.First(c => c.Type == "active").Value.Should().Be("true");
 
             var scopes = response.Claims.Where(c => c.Type == "scope").ToList();
-            scopes.Count().Should().Be(2);
+            scopes.Count.Should().Be(2);
             scopes.First().Value.Should().Be("api1");
             scopes.First().Issuer.Should().Be("https://idsvr4");
             scopes.Skip(1).First().Value.Should().Be("api2");
@@ -334,7 +335,7 @@ namespace IdentityModel.UnitTests
         [Fact]
         public async Task Additional_request_parameters_should_be_handled_correctly()
         {
-            var document = File.ReadAllText(FileName.Create("success_introspection_response.json"));
+            var document = await File.ReadAllTextAsync(FileName.Create("success_introspection_response.json"));
             var handler = new NetworkHandler(document, HttpStatusCode.OK);
 
             var client = new HttpClient(handler);

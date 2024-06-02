@@ -2,10 +2,6 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 using IdentityModel.Internal;
-using System;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace IdentityModel.Client;
 
@@ -23,6 +19,10 @@ public static class HttpClientTokenRequestExtensions
     /// <returns></returns>
     public static async Task<TokenResponse> RequestClientCredentialsTokenAsync(this HttpMessageInvoker client, ClientCredentialsTokenRequest request, CancellationToken cancellationToken = default)
     {
+        ArgumentNullException.ThrowIfNull(client, nameof(client));
+
+        ArgumentNullException.ThrowIfNull(request, nameof(request));
+
         var clone = request.Clone();
 
         clone.Parameters.AddRequired(OidcConstants.TokenRequest.GrantType, OidcConstants.GrantTypes.ClientCredentials);
@@ -45,6 +45,10 @@ public static class HttpClientTokenRequestExtensions
     /// <returns></returns>
     public static async Task<TokenResponse> RequestDeviceTokenAsync(this HttpMessageInvoker client, DeviceTokenRequest request, CancellationToken cancellationToken = default)
     {
+        ArgumentNullException.ThrowIfNull(client, nameof(client));
+
+        ArgumentNullException.ThrowIfNull(request, nameof(request));
+
         var clone = request.Clone();
 
         clone.Parameters.AddRequired(OidcConstants.TokenRequest.GrantType, OidcConstants.GrantTypes.DeviceCode);
@@ -62,6 +66,10 @@ public static class HttpClientTokenRequestExtensions
     /// <returns></returns>
     public static async Task<TokenResponse> RequestPasswordTokenAsync(this HttpMessageInvoker client, PasswordTokenRequest request, CancellationToken cancellationToken = default)
     {
+        ArgumentNullException.ThrowIfNull(client, nameof(client));
+
+        ArgumentNullException.ThrowIfNull(request, nameof(request));
+
         var clone = request.Clone();
 
         clone.Parameters.AddRequired(OidcConstants.TokenRequest.GrantType, OidcConstants.GrantTypes.Password);
@@ -86,6 +94,10 @@ public static class HttpClientTokenRequestExtensions
     /// <returns></returns>
     public static async Task<TokenResponse> RequestAuthorizationCodeTokenAsync(this HttpMessageInvoker client, AuthorizationCodeTokenRequest request, CancellationToken cancellationToken = default)
     {
+        ArgumentNullException.ThrowIfNull(client, nameof(client));
+
+        ArgumentNullException.ThrowIfNull(request, nameof(request));
+
         var clone = request.Clone();
 
         clone.Parameters.AddRequired(OidcConstants.TokenRequest.GrantType, OidcConstants.GrantTypes.AuthorizationCode);
@@ -110,6 +122,10 @@ public static class HttpClientTokenRequestExtensions
     /// <returns></returns>
     public static async Task<TokenResponse> RequestRefreshTokenAsync(this HttpMessageInvoker client, RefreshTokenRequest request, CancellationToken cancellationToken = default)
     {
+        ArgumentNullException.ThrowIfNull(client, nameof(client));
+
+        ArgumentNullException.ThrowIfNull(request, nameof(request));
+
         var clone = request.Clone();
 
         clone.Parameters.AddRequired(OidcConstants.TokenRequest.GrantType, OidcConstants.GrantTypes.RefreshToken);
@@ -133,6 +149,10 @@ public static class HttpClientTokenRequestExtensions
     /// <returns></returns>
     public static async Task<TokenResponse> RequestTokenExchangeTokenAsync(this HttpMessageInvoker client, TokenExchangeTokenRequest request, CancellationToken cancellationToken = default)
     {
+        ArgumentNullException.ThrowIfNull(client, nameof(client));
+
+        ArgumentNullException.ThrowIfNull(request, nameof(request));
+
         var clone = request.Clone();
 
         clone.Parameters.AddRequired(OidcConstants.TokenRequest.GrantType, OidcConstants.GrantTypes.TokenExchange);
@@ -158,6 +178,10 @@ public static class HttpClientTokenRequestExtensions
     /// <returns></returns>
     public static async Task<TokenResponse> RequestBackchannelAuthenticationTokenAsync(this HttpMessageInvoker client, BackchannelAuthenticationTokenRequest request, CancellationToken cancellationToken = default)
     {
+        ArgumentNullException.ThrowIfNull(client, nameof(client));
+
+        ArgumentNullException.ThrowIfNull(request, nameof(request));
+
         var clone = request.Clone();
 
         clone.Parameters.AddRequired(OidcConstants.TokenRequest.GrantType, OidcConstants.GrantTypes.Ciba);
@@ -180,6 +204,10 @@ public static class HttpClientTokenRequestExtensions
     /// <returns></returns>
     public static async Task<TokenResponse> RequestTokenAsync(this HttpMessageInvoker client, TokenRequest request, CancellationToken cancellationToken = default)
     {
+        ArgumentNullException.ThrowIfNull(client, nameof(client));
+
+        ArgumentNullException.ThrowIfNull(request, nameof(request));
+
         var clone = request.Clone();
 
         if (!clone.Parameters.ContainsKey(OidcConstants.TokenRequest.GrantType))
@@ -201,7 +229,7 @@ public static class HttpClientTokenRequestExtensions
     /// <exception cref="ArgumentNullException">parameters</exception>
     public static async Task<TokenResponse> RequestTokenRawAsync(this HttpMessageInvoker client, string address, Parameters parameters, CancellationToken cancellationToken = default)
     {
-        if (parameters == null) throw new ArgumentNullException(nameof(parameters));
+        ArgumentNullException.ThrowIfNull(parameters, nameof(parameters));
 
         var request = new TokenRequest
         {

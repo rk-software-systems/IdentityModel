@@ -23,7 +23,7 @@ public abstract class ClientOptions
     /// <value>
     /// The address.
     /// </value>
-    public string Address { get; set; } = default!;
+    public string? Address { get; set; }
 
     /// <summary>
     /// Gets or sets the client identifier.
@@ -31,7 +31,7 @@ public abstract class ClientOptions
     /// <value>
     /// The client identifier.
     /// </value>
-    public string ClientId { get; set; } = default!;
+    public string? ClientId { get; set; }
 
     /// <summary>
     /// Gets or sets the client secret.
@@ -47,7 +47,7 @@ public abstract class ClientOptions
     /// <value>
     /// The assertion.
     /// </value>
-    public ClientAssertion? ClientAssertion { get; set; } = new();
+    public ClientAssertion? ClientAssertion { get; set; }
 
     /// <summary>
     /// Gets or sets the client credential style.

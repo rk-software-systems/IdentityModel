@@ -9,14 +9,9 @@ using System.Security.Cryptography.X509Certificates;
 namespace IdentityModel;
 
 [EditorBrowsable(EditorBrowsableState.Never)]
-public class X509CertificatesLocation
+public class X509CertificatesLocation(StoreLocation location)
 {
-    private readonly StoreLocation _location;
-
-    public X509CertificatesLocation(StoreLocation location)
-    {
-        _location = location;
-    }
+    private readonly StoreLocation _location = location;
 
     public X509CertificatesName My => new X509CertificatesName(_location, StoreName.My);
     public X509CertificatesName AddressBook => new X509CertificatesName(_location, StoreName.AddressBook);

@@ -14,7 +14,7 @@ public static class Principal
     /// <summary>
     /// Gets an anoymous ClaimsPrincipal.
     /// </summary>
-    public static ClaimsPrincipal Anonymous => new ClaimsPrincipal(Identity.Anonymous);
+    public static ClaimsPrincipal Anonymous => new(Identity.Anonymous);
 
     /// <summary>
     /// Creates a ClaimsPrincipal using the specified authentication type and claims.

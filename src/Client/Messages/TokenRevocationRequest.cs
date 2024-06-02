@@ -6,7 +6,7 @@ namespace IdentityModel.Client;
 /// <summary>
 /// Request for OAuth token revocation
 /// </summary>
-/// <seealso cref="IdentityModel.Client.ProtocolRequest" />
+/// <seealso cref="ProtocolRequest" />
 public class TokenRevocationRequest : ProtocolRequest
 {
     /// <summary>
@@ -15,7 +15,7 @@ public class TokenRevocationRequest : ProtocolRequest
     /// <value>
     /// The token.
     /// </value>
-    public string Token { get; set; } = default!;
+    public required string Token { get; set; }
 
     /// <summary>
     /// Gets or sets the token type hint.
@@ -23,5 +23,5 @@ public class TokenRevocationRequest : ProtocolRequest
     /// <value>
     /// The token type hint.
     /// </value>
-    public string TokenTypeHint { get; set; } = default!;
+    public string? TokenTypeHint { get; set; }
 }

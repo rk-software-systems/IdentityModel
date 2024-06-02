@@ -2,9 +2,6 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 using IdentityModel.Jwk;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json.Serialization;
 
 #pragma warning disable 1591
@@ -274,7 +271,7 @@ public class DynamicClientRegistrationDocument
     /// </summary>
     [JsonPropertyName(OidcConstants.ClientMetadata.RequestUris)]
     public ICollection<Uri> RequestUris { get; set; } = new HashSet<Uri>();
-    
+
     /// <summary>
     /// Custom client metadata fields to include in the serialization.
     /// </summary>
@@ -282,13 +279,13 @@ public class DynamicClientRegistrationDocument
     public IDictionary<string, object>? Extensions { get; } = new Dictionary<string, object>(StringComparer.Ordinal);
 
     // Don't serialize empty arrays
-    public bool ShouldSerializeRequestUris() => RequestUris.Any();
+    public bool ShouldSerializeRequestUris() => RequestUris.Count > 0;
 
-    public bool ShouldSerializeDefaultAcrValues() => DefaultAcrValues.Any();
+    public bool ShouldSerializeDefaultAcrValues() => DefaultAcrValues.Count > 0;
 
-    public bool ShouldSerializeResponseTypes() => ResponseTypes.Any();
+    public bool ShouldSerializeResponseTypes() => ResponseTypes.Count > 0;
 
-    public bool ShouldSerializeGrantTypes() => GrantTypes.Any();
+    public bool ShouldSerializeGrantTypes() => GrantTypes.Count > 0;
 
-    public bool ShouldSerializeContacts() => Contacts.Any();
+    public bool ShouldSerializeContacts() => Contacts.Count > 0;
 }

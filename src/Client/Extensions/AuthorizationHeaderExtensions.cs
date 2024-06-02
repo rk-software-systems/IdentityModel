@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
-using System.Net.Http;
 using System.Net.Http.Headers;
 using static IdentityModel.OidcConstants;
 
@@ -20,6 +19,8 @@ public static class AuthorizationHeaderExtensions
     /// <param name="password">The password.</param>
     public static void SetBasicAuthentication(this HttpClient client, string userName, string password)
     {
+        ArgumentNullException.ThrowIfNull(client, nameof(client));
+
         client.DefaultRequestHeaders.Authorization = new BasicAuthenticationHeaderValue(userName, password);
     }
 
@@ -31,6 +32,8 @@ public static class AuthorizationHeaderExtensions
     /// <param name="password">The password.</param>
     public static void SetBasicAuthenticationOAuth(this HttpClient client, string userName, string password)
     {
+        ArgumentNullException.ThrowIfNull(client, nameof(client));
+
         client.DefaultRequestHeaders.Authorization = new BasicAuthenticationOAuthHeaderValue(userName, password);
     }
 
@@ -42,6 +45,8 @@ public static class AuthorizationHeaderExtensions
     /// <param name="token">The token.</param>
     public static void SetToken(this HttpClient client, string scheme, string token)
     {
+        ArgumentNullException.ThrowIfNull(client, nameof(client));
+
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(scheme, token);
     }
 
@@ -63,6 +68,8 @@ public static class AuthorizationHeaderExtensions
     /// <param name="password">The password.</param>
     public static void SetBasicAuthentication(this HttpRequestMessage request, string userName, string password)
     {
+        ArgumentNullException.ThrowIfNull(request, nameof(request));
+
         request.Headers.Authorization = new BasicAuthenticationHeaderValue(userName, password);
     }
         
@@ -74,6 +81,8 @@ public static class AuthorizationHeaderExtensions
     /// <param name="password">The password.</param>
     public static void SetBasicAuthenticationOAuth(this HttpRequestMessage request, string userName, string password)
     {
+        ArgumentNullException.ThrowIfNull(request, nameof(request));
+
         request.Headers.Authorization = new BasicAuthenticationOAuthHeaderValue(userName, password);
     }
 
@@ -85,6 +94,8 @@ public static class AuthorizationHeaderExtensions
     /// <param name="token">The token.</param>
     public static void SetToken(this HttpRequestMessage request, string scheme, string token)
     {
+        ArgumentNullException.ThrowIfNull(request, nameof(request));
+
         request.Headers.Authorization = new AuthenticationHeaderValue(scheme, token);
     }
 

@@ -2,7 +2,6 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 using IdentityModel.Internal;
-using System;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -22,13 +21,11 @@ public static class StringExtensions
     {
         if (input.IsMissing()) return string.Empty;
 
-        using (var sha = SHA256.Create())
-        {
-            var bytes = Encoding.UTF8.GetBytes(input);
-            var hash = sha.ComputeHash(bytes);
+        using var sha = SHA256.Create();
+        var bytes = Encoding.UTF8.GetBytes(input);
+        var hash = sha.ComputeHash(bytes);
 
-            return Convert.ToBase64String(hash);
-        }
+        return Convert.ToBase64String(hash);
     }
 
     /// <summary>
@@ -40,12 +37,10 @@ public static class StringExtensions
     {
         if (input.IsMissing()) return string.Empty;
 
-        using (var sha = SHA512.Create())
-        {
-            var bytes = Encoding.UTF8.GetBytes(input);
-            var hash = sha.ComputeHash(bytes);
+        using var sha = SHA512.Create();
+        var bytes = Encoding.UTF8.GetBytes(input);
+        var hash = sha.ComputeHash(bytes);
 
-            return Convert.ToBase64String(hash);
-        }
+        return Convert.ToBase64String(hash);
     }
 }

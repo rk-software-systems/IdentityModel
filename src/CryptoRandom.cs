@@ -1,7 +1,6 @@
 // Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
-using System;
 using System.Security.Cryptography;
 
 namespace IdentityModel;
@@ -63,7 +62,7 @@ public class CryptoRandom : Random
             case OutputFormat.Base64:
                 return Convert.ToBase64String(bytes);
             case OutputFormat.Hex:
-                return BitConverter.ToString(bytes).Replace("-", "");
+                return BitConverter.ToString(bytes).Replace("-", "", StringComparison.Ordinal);
             default:
                 throw new ArgumentException("Invalid output format", nameof(format));
         }
@@ -84,7 +83,7 @@ public class CryptoRandom : Random
     /// Returns a nonnegative random number.
     /// </summary>
     /// <returns>
-    /// A 32-bit signed integer greater than or equal to zero and less than <see cref="F:System.Int32.MaxValue"/>.
+    /// A 32-bit signed integer greater than or equal to zero and less than <see cref="System.Int32.MaxValue"/>.
     /// </returns>
     public override Int32 Next()
     {
@@ -99,12 +98,12 @@ public class CryptoRandom : Random
     /// <returns>
     /// A 32-bit signed integer greater than or equal to zero, and less than <paramref name="maxValue"/>; that is, the range of return values ordinarily includes zero but not <paramref name="maxValue"/>. However, if <paramref name="maxValue"/> equals zero, <paramref name="maxValue"/> is returned.
     /// </returns>
-    /// <exception cref="T:System.ArgumentOutOfRangeException">
+    /// <exception cref="System.ArgumentOutOfRangeException">
     /// 	<paramref name="maxValue"/> is less than zero.
     /// </exception>
     public override Int32 Next(Int32 maxValue)
     {
-        if (maxValue < 0) throw new ArgumentOutOfRangeException(nameof(maxValue));
+        ArgumentOutOfRangeException.ThrowIfNegative(maxValue, nameof(maxValue));
         return Next(0, maxValue);
     }
 
@@ -116,12 +115,12 @@ public class CryptoRandom : Random
     /// <returns>
     /// A 32-bit signed integer greater than or equal to <paramref name="minValue"/> and less than <paramref name="maxValue"/>; that is, the range of return values includes <paramref name="minValue"/> but not <paramref name="maxValue"/>. If <paramref name="minValue"/> equals <paramref name="maxValue"/>, <paramref name="minValue"/> is returned.
     /// </returns>
-    /// <exception cref="T:System.ArgumentOutOfRangeException">
+    /// <exception cref="System.ArgumentOutOfRangeException">
     /// 	<paramref name="minValue"/> is greater than <paramref name="maxValue"/>.
     /// </exception>
     public override Int32 Next(Int32 minValue, Int32 maxValue)
     {
-        if (minValue > maxValue) throw new ArgumentOutOfRangeException(nameof(minValue));
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(minValue, maxValue, nameof(minValue));
         if (minValue == maxValue) return minValue;
         Int64 diff = maxValue - minValue;
 
@@ -156,12 +155,12 @@ public class CryptoRandom : Random
     /// Fills the elements of a specified array of bytes with random numbers.
     /// </summary>
     /// <param name="buffer">An array of bytes to contain random numbers.</param>
-    /// <exception cref="T:System.ArgumentNullException">
+    /// <exception cref="System.ArgumentNullException">
     /// 	<paramref name="buffer"/> is null.
     /// </exception>
     public override void NextBytes(byte[] buffer)
     {
-        if (buffer == null) throw new ArgumentNullException(nameof(buffer));
+        ArgumentNullException.ThrowIfNull(buffer, nameof(buffer));
         Rng.GetBytes(buffer);
     }
 }

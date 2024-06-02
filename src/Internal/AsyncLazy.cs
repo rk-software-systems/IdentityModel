@@ -1,18 +1,11 @@
 ﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
-using System;
-using System.Threading.Tasks;
-
 namespace IdentityModel.Internal;
 
-internal class AsyncLazy<T> : Lazy<Task<T>>
+internal sealed class AsyncLazy<T>(Func<Task<T>> taskFactory) : Lazy<Task<T>>(() => GetTaskAsync(taskFactory).Unwrap())
 {
-	public AsyncLazy(Func<Task<T>> taskFactory) :
-		base(() => GetTaskAsync(taskFactory).Unwrap())
-	{ }
-
-	private static async Task<Task<T>> GetTaskAsync(Func<Task<T>> taskFactory)
+    private static async Task<Task<T>> GetTaskAsync(Func<Task<T>> taskFactory)
 	{
 		if (TaskHelpers.CanFactoryStartNew)
 		{

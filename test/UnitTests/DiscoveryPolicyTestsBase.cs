@@ -16,14 +16,13 @@ namespace IdentityModel.UnitTests
 
         protected DiscoveryPolicy ForceTestedAuthorityValidationStrategy(DiscoveryPolicy policy)
         {
-            if (policy == null)
-                throw new ArgumentNullException(nameof(policy));
+            ArgumentNullException.ThrowIfNull(policy, nameof(policy));
 
             policy.AuthorityValidationStrategy = _authorityValidationStrategy;
             return policy;
         }
 
-        protected NetworkHandler GetHandler(string issuer, string endpointBase = null, string alternateEndpointBase = null)
+        protected static NetworkHandler GetHandler(string issuer, string endpointBase = null, string alternateEndpointBase = null)
         {
             if (endpointBase == null) endpointBase = issuer;
             if (alternateEndpointBase == null) alternateEndpointBase = issuer;

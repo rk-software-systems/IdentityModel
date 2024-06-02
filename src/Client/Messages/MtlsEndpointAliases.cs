@@ -5,21 +5,16 @@ namespace IdentityModel.Client;
 /// <summary>
 /// MTLS endpoint aliases
 /// </summary>
-public class MtlsEndpointAliases
+/// <remarks>
+/// ctor
+/// </remarks>
+/// <param name="json"></param>
+public class MtlsEndpointAliases(JsonElement json)
 {
     /// <summary>
     /// The raw JSON
     /// </summary>
-    public JsonElement Json { get; }
-
-    /// <summary>
-    /// ctor
-    /// </summary>
-    /// <param name="json"></param>
-    public MtlsEndpointAliases(JsonElement json)
-    {
-        Json = json;
-    }
+    public JsonElement Json { get; } = json;
 
     /// <summary>
     /// Returns the token endpoint address

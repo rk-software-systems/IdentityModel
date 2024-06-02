@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using IdentityModel.Internal;
 
@@ -33,9 +30,9 @@ public class Parameters : List<KeyValuePair<string, string>>
         foreach (var prop in values.GetType().GetRuntimeProperties())
         {
             var value = prop.GetValue(values) as string;
-            if (value.IsPresent())
+            if (!string.IsNullOrWhiteSpace(value))
             {
-                dictionary.Add(prop.Name, value!);
+                dictionary.Add(prop.Name, value);
             }
         }
 
@@ -89,7 +86,7 @@ public class Parameters : List<KeyValuePair<string, string>>
     /// <param name="index"></param>
     public IEnumerable<string> this[string index]
     {
-        get { return this.Where(i => i.Key.Equals(index)).Select(i => i.Value); }
+        get { return this.Where(i => i.Key.Equals(index, StringComparison.Ordinal)).Select(i => i.Value); }
     }
         
     /// <summary>
@@ -109,7 +106,7 @@ public class Parameters : List<KeyValuePair<string, string>>
     /// <returns></returns>
     public bool ContainsKey(string key)
     {
-        return (this.Any(k => string.Equals(k.Key, key)));
+        return (this.Any(k => string.Equals(k.Key, key, StringComparison.Ordinal)));
     }
 
     /// <summary>
@@ -132,9 +129,9 @@ public class Parameters : List<KeyValuePair<string, string>>
             }
         }
 
-        if (value.IsPresent())
+        if (!string.IsNullOrWhiteSpace(value))
         {
-            Add(key, value!);
+            Add(key, value);
         }
     }
 
@@ -160,9 +157,9 @@ public class Parameters : List<KeyValuePair<string, string>>
             }
         }
             
-        if (value.IsPresent() || allowEmptyValue)
+        if (!string.IsNullOrWhiteSpace(value) || allowEmptyValue)
         {
-            Add(key, value!);
+            Add(key, value);
         }
         else
         {

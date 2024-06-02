@@ -64,6 +64,8 @@ namespace IdentityModel.UnitTests
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
+            ArgumentNullException.ThrowIfNull(request, nameof(request));
+
             Request = request;
             Body = await SafeReadContentFrom(request);
 
@@ -96,7 +98,7 @@ namespace IdentityModel.UnitTests
             return response;
         }
 
-        private async Task<string> SafeReadContentFrom(HttpRequestMessage request)
+        private static async Task<string> SafeReadContentFrom(HttpRequestMessage request)
         {
             if (request.Content == null) return null;
 

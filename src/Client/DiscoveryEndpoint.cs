@@ -1,12 +1,16 @@
 ﻿using IdentityModel.Internal;
-using System;
 
 namespace IdentityModel.Client;
 
 /// <summary>
 /// Represents a URL to a discovery endpoint - parsed to separate the URL and authority
 /// </summary>
-public class DiscoveryEndpoint
+/// <remarks>
+/// Initializes a new instance of the <see cref="DiscoveryEndpoint"/> class.
+/// </remarks>
+/// <param name="authority">The authority.</param>
+/// <param name="url">The discovery endpoint URL.</param>
+public class DiscoveryEndpoint(string authority, string url)
 {
     /// <summary>
     /// Parses a URL and turns it into authority and discovery endpoint URL.
@@ -19,9 +23,9 @@ public class DiscoveryEndpoint
     /// </exception>
     public static DiscoveryEndpoint ParseUrl(string input, string? path = null)
     {
-        if (input == null) throw new ArgumentNullException(nameof(input));
-        
-        if (String.IsNullOrEmpty(path))
+        ArgumentNullException.ThrowIfNull(input, nameof(input));
+
+        if (string.IsNullOrEmpty(path))
         {
             path = OidcConstants.Discovery.DiscoveryEndpoint;
         }
@@ -32,13 +36,13 @@ public class DiscoveryEndpoint
             throw new InvalidOperationException("Malformed URL");
         }
 
-        if (!DiscoveryEndpoint.IsValidScheme(uri!))
+        if (!DiscoveryEndpoint.IsValidScheme(uri))
         {
             throw new InvalidOperationException("Malformed URL");
         }
 
         var url = input.RemoveTrailingSlash();
-        if (path!.StartsWith("/"))
+        if (path.StartsWith('/'))
         {
             path = path.Substring(1);
         }
@@ -62,6 +66,8 @@ public class DiscoveryEndpoint
     /// </returns>
     public static bool IsValidScheme(Uri url)
     {
+        ArgumentNullException.ThrowIfNull(url, nameof(url));
+
         if (string.Equals(url.Scheme, "http", StringComparison.OrdinalIgnoreCase) ||
             string.Equals(url.Scheme, "https", StringComparison.OrdinalIgnoreCase))
         {
@@ -81,6 +87,10 @@ public class DiscoveryEndpoint
     /// </returns>
     public static bool IsSecureScheme(Uri url, DiscoveryPolicy policy)
     {
+        ArgumentNullException.ThrowIfNull(url, nameof(url));
+
+        ArgumentNullException.ThrowIfNull(policy, nameof(policy));
+
         if (policy.RequireHttps == true)
         {
             if (policy.AllowHttpOnLoopback == true)
@@ -103,22 +113,12 @@ public class DiscoveryEndpoint
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="DiscoveryEndpoint"/> class.
-    /// </summary>
-    /// <param name="authority">The authority.</param>
-    /// <param name="url">The discovery endpoint URL.</param>
-    public DiscoveryEndpoint(string authority, string url)
-    {
-        Authority = authority;
-        Url = url;
-    }
-    /// <summary>
     /// Gets or sets the authority.
     /// </summary>
     /// <value>
     /// The authority.
     /// </value>
-    public string Authority { get; }
+    public string Authority { get; } = authority;
 
     /// <summary>
     /// Gets or sets the discovery endpoint.
@@ -126,5 +126,5 @@ public class DiscoveryEndpoint
     /// <value>
     /// The discovery endpoint.
     /// </value>
-    public string Url { get; }
+    public string Url { get; } = url;
 }

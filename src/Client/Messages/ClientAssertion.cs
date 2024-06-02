@@ -11,7 +11,7 @@ public class ClientAssertion
     /// <value>
     /// The type.
     /// </value>
-    public string Type { get; set; } = default!;
+    public required string Type { get; set; }
 
     /// <summary>
     /// Gets or sets the assertion value.
@@ -19,5 +19,5 @@ public class ClientAssertion
     /// <value>
     /// The value.
     /// </value>
-    public string Value { get; set; } = default!;
+    public required string Value { get; set; }
 }

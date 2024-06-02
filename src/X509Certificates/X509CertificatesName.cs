@@ -9,16 +9,10 @@ using System.Security.Cryptography.X509Certificates;
 namespace IdentityModel;
 
 [EditorBrowsable(EditorBrowsableState.Never)]
-public class X509CertificatesName
+public class X509CertificatesName(StoreLocation location, StoreName name)
 {
-    private readonly StoreLocation _location;
-    private readonly StoreName _name;
-
-    public X509CertificatesName(StoreLocation location, StoreName name)
-    {
-        _location = location;
-        _name = name;
-    }
+    private readonly StoreLocation _location = location;
+    private readonly StoreName _name = name;
 
     public X509CertificatesFinder Thumbprint => new X509CertificatesFinder(_location, _name, X509FindType.FindByThumbprint);
     public X509CertificatesFinder SubjectDistinguishedName => new X509CertificatesFinder(_location, _name, X509FindType.FindBySubjectDistinguishedName);

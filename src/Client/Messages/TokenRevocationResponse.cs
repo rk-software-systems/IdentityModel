@@ -6,6 +6,6 @@ namespace IdentityModel.Client;
 /// <summary>
 /// Models an OAuth 2.0 token revocation response
 /// </summary>
-/// <seealso cref="IdentityModel.Client.ProtocolResponse" />
+/// <seealso cref="ProtocolResponse" />
 public class TokenRevocationResponse : ProtocolResponse
 { }

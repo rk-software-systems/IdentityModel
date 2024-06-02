@@ -6,7 +6,7 @@ namespace IdentityModel.Client;
 /// <summary>
 /// Models a CIBA backchannel authentication response
 /// </summary>
-/// <seealso cref="IdentityModel.Client.ProtocolResponse" />
+/// <seealso cref="ProtocolResponse" />
 public class BackchannelAuthenticationResponse : ProtocolResponse
 {
     /// <summary>

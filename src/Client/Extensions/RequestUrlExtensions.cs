@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
+using System.Globalization;
+
 namespace IdentityModel.Client;
 
 /// <summary>
@@ -16,6 +18,8 @@ public static class RequestUrlExtensions
     /// <returns></returns>
     public static string Create(this RequestUrl request, Parameters parameters)
     {
+        ArgumentNullException.ThrowIfNull(request, nameof(request));    
+
         return request.Create(parameters);
     }
 
@@ -60,6 +64,8 @@ public static class RequestUrlExtensions
         string? idTokenHint = null,
         Parameters? extra = null)
     {
+        ArgumentNullException.ThrowIfNull(request, nameof(request));
+
         var values = new Parameters
         {
             { OidcConstants.AuthorizeRequest.ClientId, clientId },
@@ -77,9 +83,9 @@ public static class RequestUrlExtensions
         values.AddOptional(OidcConstants.AuthorizeRequest.CodeChallenge, codeChallenge);
         values.AddOptional(OidcConstants.AuthorizeRequest.CodeChallengeMethod, codeChallengeMethod);
         values.AddOptional(OidcConstants.AuthorizeRequest.Display, display);
-        values.AddOptional(OidcConstants.AuthorizeRequest.MaxAge, maxAge?.ToString());
+        values.AddOptional(OidcConstants.AuthorizeRequest.MaxAge, maxAge?.ToString(CultureInfo.InvariantCulture));
         values.AddOptional(OidcConstants.AuthorizeRequest.UiLocales, uiLocales);
-        values.AddOptional(OidcConstants.AuthorizeRequest.IdTokenHint, idTokenHint);
+        values.AddOptional(OidcConstants.AuthorizeRequest.IdTokenHint, idTokenHint);        
 
         return request.Create(values.Merge(extra));
     }
@@ -99,6 +105,8 @@ public static class RequestUrlExtensions
         string? state = null,
         Parameters? extra = null)
     {
+        ArgumentNullException.ThrowIfNull(request, nameof(request));
+
         var values = new Parameters();
 
         values.AddOptional(OidcConstants.EndSessionRequest.IdTokenHint, idTokenHint);

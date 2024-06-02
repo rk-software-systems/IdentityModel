@@ -5,6 +5,7 @@ using FluentAssertions;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.WebUtilities;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -60,7 +61,7 @@ namespace IdentityModel.UnitTests
             };
 
             request.Headers.Add("custom", "custom");
-            request.Properties.Add("custom", "custom");
+            request.Options.TryAdd("custom", "custom");
 
             var _ = await client.RequestDeviceAuthorizationAsync(request);
 
@@ -73,8 +74,8 @@ namespace IdentityModel.UnitTests
             headers.Count().Should().Be(3);
             headers.Should().Contain(h => h.Key == "custom" && h.Value.First() == "custom");
 
-            var properties = httpRequest.Properties;
-            properties.Count.Should().Be(1);
+            var properties = httpRequest.Options;
+            properties.Count().Should().Be(1);
 
             var prop = properties.First();
             prop.Key.Should().Be("custom");
@@ -84,7 +85,7 @@ namespace IdentityModel.UnitTests
         [Fact]
         public async Task Setting_basic_authentication_style_should_send_basic_authentication_header()
         {
-            var document = File.ReadAllText(FileName.Create("success_device_authorization_response.json"));
+            var document = await File.ReadAllTextAsync(FileName.Create("success_device_authorization_response.json"));
             var handler = new NetworkHandler(document, HttpStatusCode.OK);
 
             var client = new HttpClient(handler);
@@ -106,7 +107,7 @@ namespace IdentityModel.UnitTests
         [Fact]
         public async Task Setting_post_values_authentication_style_should_post_values()
         {
-            var document = File.ReadAllText(FileName.Create("success_device_authorization_response.json"));
+            var document = await File.ReadAllTextAsync(FileName.Create("success_device_authorization_response.json"));
             var handler = new NetworkHandler(document, HttpStatusCode.OK);
 
             var client = new HttpClient(handler);
@@ -199,7 +200,7 @@ namespace IdentityModel.UnitTests
         [Fact]
         public async Task Valid_protocol_error_should_be_handled_correctly()
         {
-            var document = File.ReadAllText(FileName.Create("failure_device_authorization_response.json"));
+            var document = await File.ReadAllTextAsync(FileName.Create("failure_device_authorization_response.json"));
             var handler = new NetworkHandler(document, HttpStatusCode.BadRequest);
 
             var client = new HttpClient(handler);

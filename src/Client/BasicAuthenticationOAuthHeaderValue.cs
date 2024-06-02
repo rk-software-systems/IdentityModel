@@ -9,17 +9,14 @@ namespace System.Net.Http;
 /// <summary>
 /// HTTP Basic Authentication authorization header for RFC6749 client authentication
 /// </summary>
-/// <seealso cref="System.Net.Http.Headers.AuthenticationHeaderValue" />
-public class BasicAuthenticationOAuthHeaderValue : AuthenticationHeaderValue
+/// <seealso cref="AuthenticationHeaderValue" />
+/// <remarks>
+/// Initializes a new instance of the <see cref="BasicAuthenticationOAuthHeaderValue"/> class.
+/// </remarks>
+/// <param name="userName">Name of the user.</param>
+/// <param name="password">The password.</param>
+public class BasicAuthenticationOAuthHeaderValue(string userName, string password) : AuthenticationHeaderValue("Basic", EncodeCredential(userName, password))
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="BasicAuthenticationOAuthHeaderValue"/> class.
-    /// </summary>
-    /// <param name="userName">Name of the user.</param>
-    /// <param name="password">The password.</param>
-    public BasicAuthenticationOAuthHeaderValue(string userName, string password)
-        : base("Basic", EncodeCredential(userName, password))
-    { }
 
     /// <summary>
     /// Encodes the credential.
@@ -46,6 +43,6 @@ public class BasicAuthenticationOAuthHeaderValue : AuthenticationHeaderValue
             return String.Empty;
         }
             
-        return Uri.EscapeDataString(value).Replace("%20", "+");
+        return Uri.EscapeDataString(value).Replace("%20", "+", StringComparison.Ordinal);
     }
 }
