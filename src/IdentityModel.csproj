@@ -15,7 +15,7 @@
     <Description>OpenID Connect &amp; OAuth 2.0 client library.</Description>
     <Authors>Dominick Baier;Brock Allen;Kanstantsin Karakou;Stsefchak Raman</Authors>
     <PackageTags>OAuth2;OAuth 2.0;OpenID Connect;Security;Identity;IdentityServer</PackageTags>
-    <PackageIcon>icon.jpg</PackageIcon>
+    <PackageIcon>company-logo.png</PackageIcon>
     <PackageProjectUrl>https://github.com/rk-software-systems/IdentityModel</PackageProjectUrl>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
   </PropertyGroup>
@@ -28,7 +28,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="../icon.jpg" Pack="true" Visible="false" PackagePath="" />
+    <None Include="../company-logo.png" Pack="true" Visible="false" PackagePath="" />
   </ItemGroup>
   
   <!--SourceLink-->
