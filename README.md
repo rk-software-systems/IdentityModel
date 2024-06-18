@@ -4,6 +4,11 @@ This is a fork of the IdentityModel library. The original library can be found [
 
 This IdentityModel targets .NET 8.
 
+## NuGet
+
+**RKSoftware.IdentityModel**
+[![NuGet Badge](https://buildstats.info/nuget/RKSoftware.IdentityModel)](https://www.nuget.org/packages/RKSoftware.IdentityModel/)
+
 ## About IdentityModel
 
 IdentityModel is a .NET standard helper library for claims-based identity, OAuth 2.0 and OpenID Connect.
