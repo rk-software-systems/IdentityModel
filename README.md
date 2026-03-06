@@ -2,7 +2,7 @@
 
 This is a fork of the IdentityModel library. The original library can be found [here](https://github.com/IdentityModel/IdentityModel).
 
-This IdentityModel targets .NET 8.
+This IdentityModel targets .NET 8 and .NET 10.
 
 ## NuGet
 
