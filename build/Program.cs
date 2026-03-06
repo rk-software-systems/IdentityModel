@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
 
 using static Bullseye.Targets;
@@ -34,12 +33,12 @@ namespace build
                 Run("dotnet", "clean -c Release -v m --nologo");
             });
 
-            Target(Targets.Build, DependsOn(Targets.CleanBuildOutput), () =>
+            Target(Targets.Build, [Targets.CleanBuildOutput], () =>
             {
                 Run("dotnet", "build -c Release --nologo");
             });
 
-            Target(Targets.Test, DependsOn(Targets.Build), () =>
+            Target(Targets.Test,[Targets.Build], () =>
             {
                 Run("dotnet", "test -c Release --no-build --nologo");
             });
@@ -52,12 +51,12 @@ namespace build
                 }
             });
 
-            Target(Targets.Pack, DependsOn(Targets.Build, Targets.CleanPackOutput), () =>
+            Target(Targets.Pack, [Targets.Build, Targets.CleanPackOutput], () =>
             {
                 Run("dotnet", $"pack ./src/IdentityModel.csproj -c Release -o \"{Directory.CreateDirectory(packOutput).FullName}\" --no-build --nologo");
             });
 
-            Target("default", DependsOn(Targets.Test, Targets.Pack));
+            Target("default", [Targets.Test, Targets.Pack]);
 
             await RunTargetsAndExitAsync(args, ex => ex is SimpleExec.ExitCodeException || ex.Message.EndsWith(envVarMissing));
         }
